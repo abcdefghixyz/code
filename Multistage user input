@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <limits.h>
+
+#define INF INT_MAX
+#define V 6
+
+int min(int x, int y) {
+    return (x < y) ? x : y;
+}
+
+int shortestPath(int graph[V][V]) {
+    int i, j, cost[V];
+    cost[V - 1] = 0;
+
+    for (i = V - 2; i >= 0; i--) {
+        cost[i] = INF;
+        for (j = i; j < V; j++) {
+            if (graph[i][j] == INF)
+                continue;
+
+            cost[i] = min(cost[i], graph[i][j] + cost[j]);
+        }
+    }
+
+    return cost[0];
+}
+
+int main() {
+    int graph[V][V];
+    printf("Enter the adjacency matrix for the graph (%d x %d):\n", V, V);
+    for (int i = 0; i < V; i++) {
+        for (int j = 0; j < V; j++) {
+            scanf("%d", &graph[i][j]);
+            if (graph[i][j] == -1)  // Assuming -1 as representation of infinity
+                graph[i][j] = INF;
+        }
+    }
+
+    printf("The shortest path cost is %d\n", shortestPath(graph));
+    return 0;
+}
